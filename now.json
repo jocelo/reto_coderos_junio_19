@@ -1,5 +1,5 @@
 {
   "builds": [
-    { "src": "./public/index.html", "use": "@now/node" }
+    { "src": "/public/index.html", "use": "@now/node" }
   ]
 }

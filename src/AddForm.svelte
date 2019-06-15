@@ -60,7 +60,7 @@
 </style>
 
 <script>
-  import { storeCardNumber } from './store';
+  import { storeCardNumber, storeCardName } from './store';
   
   let invalidForm = false,
     cardNumber = '',

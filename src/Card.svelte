@@ -9,23 +9,25 @@
     display: inline-block;
     width: 350px;
     height: 220px;
-    background-color: rgba(255,0,0, 0.2);
+    background-color: rgba(123, 123, 123, 0.2);
+    border-radius: 15px;
   }
 
   .visa {
-    background-color:blue;
+    background: linear-gradient(to right, #5DADE2 0%, #AED6F1 100%);
+    
   }
 
   .master-card {
-    background-color:red;
+    background:linear-gradient(to right, #EC7063 0%, #F5B7B1 100%);    
   }
 
   .amex {
-    background-color: green;
+    background: linear-gradient(to right, #45B39D 0%, #A2D9CE 100%);
   }
 
   .chip-card {
-    width: 60px;
+    width: 55px;
     background-color: #FFFFCC;
     border-radius: 10px;
   }
@@ -40,7 +42,7 @@
     height: 55%;
     position: absolute;
     bottom: 0;
-    left: 0;
+    left: 10px;
   }
 
   .upper-section .brand-icon {
@@ -51,22 +53,26 @@
   }
 
   .card-number {
-    font-size: 33px;
+    font-size: 30px;
     text-align: center;
   }
 
   .card-name {
-    font-size: 25px;
-    margin-left: 20px;
+    font-size: 20px;
+    margin: 10px 20px;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 </style>
 
 <script>
   import { storeCardNumber, storeCardName } from './store.js';
 
-  let classs = '',
+  let cardType = '',
     cardNumber = '',
     cardName = '',
+    cardImageSrc = '',
     chipImage = 'https://cdn.iconscout.com/icon/free/png-512/credit-card-chip-1537934-1302066.png';
 
   const unsubscribeNumber = storeCardNumber.subscribe(value=>{
@@ -75,27 +81,32 @@
       value.split('').splice(8,4).join('') + ' ' +
       value.split('').splice(12,4).join('');
 
+    // IIN details from: 
+    // https://en.wikipedia.org/wiki/Payment_card_number#Structure
+
     if (value.length === 0) {
-      classs = '';
+      cardType = '';
+      cardImageSrc = '';
       return;
     }
 
     if (value.length === 4 && value >= '2221' && value <= '2720') {
-      classs = 'master-card';
+      cardType = 'master-card';
+      cardImageSrc = 'http://creditcardimagelogos.com/wp-content/themes/e838pqefv3ejmkevzirye533556/files/logos/cdn_subdomain/mastercard_64.png';
       return;
     }
 
     if (value.length === 2 && value === '34' || value === '37') {
-      classs = 'amex';
+      cardType = 'amex';
+      cardImageSrc = 'http://creditcardimagelogos.com/wp-content/themes/e838pqefv3ejmkevzirye533556/files/logos/new/cdn_subdomain/american_express_logo_5.gif';
       return;
     }
 
     if (value.length === 1 && value === '4') {
-      classs = 'visa';
+      cardType = 'visa';
+      cardImageSrc = 'http://creditcardimagelogos.com/wp-content/themes/e838pqefv3ejmkevzirye533556/files/logos/new/cdn_subdomain/visa_logo_8.gif'
       return;
-    } 
-    // Getting IIN details from: 
-    // https://en.wikipedia.org/wiki/Payment_card_number#Structure
+    }
   });
 
   const unsubscribeName = storeCardName.subscribe(value=>{
@@ -104,10 +115,14 @@
 </script>
 
 <div class="card-container">
-  <div class="card {classs}">
+  <div class="card {cardType}">
     <div class="upper-section">
       <div class="chip"> <img src={chipImage} alt='default chip image' class="chip-card"> </div>
-      <div class="brand-icon"> <img alt="Loading main image" src="http://creditcardimagelogos.com/wp-content/themes/e838pqefv3ejmkevzirye533556/files/logos/new/cdn_subdomain/visa_logo_8.gif" class="chip-card"> </div>
+      { #if cardImageSrc !== '' }
+      <div class="brand-icon"> 
+        <img alt="Loading main image" src={cardImageSrc} class=""> 
+      </div>
+      { /if }
     </div>
     <div class="bottom-section">
       <div class="card-number">{cardNumber}</div>
