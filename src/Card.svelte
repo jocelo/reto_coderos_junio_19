@@ -65,7 +65,7 @@
   .card-dates {
     text-align: right;
     font-size: 11px;
-    margin-right: 35px;
+    margin: 5px 30px;
   }
 
   .card-dates > div {
@@ -133,7 +133,6 @@
   });
 
   const unsubscribeName = storeCardName.subscribe(value=>card.name=value);
-
   const unsubscribeDates = storeCardDates.subscribe(value=>card.dates=value);
 </script>
 
@@ -154,7 +153,6 @@
       { /if }
       <div class="card-name">{card.name}</div>
     </div>
-
 
   </div>
 </div>
