@@ -88,16 +88,18 @@
 <script>
   import { storeCardNumber, storeCardName, storeCardDates} from './store.js';
 
-  let cardType = '',
-    cardNumber = '',
-    cardName = '',
-    cardDates = '',
-    cardImageSrc = '',
-    chipImage = 'https://cdn.iconscout.com/icon/free/png-512/credit-card-chip-1537934-1302066.png';
+  const card = {
+    type: '',
+    name: '',
+    number: '',
+    dates: '',
+    imageSrc: ''
+  },
+  chipImage = 'https://cdn.iconscout.com/icon/free/png-512/credit-card-chip-1537934-1302066.png';
 
   const unsubscribeNumber = storeCardNumber.subscribe(value=>{
     const cardPieces = value;
-    cardNumber = cardPieces.split('').splice(0,4).join('') + ' ' + 
+    card.number = cardPieces.split('').splice(0,4).join('') + ' ' + 
       cardPieces.split('').splice(4,4).join('') + ' ' +
       cardPieces.split('').splice(8,4).join('') + ' ' +
       cardPieces.split('').splice(12,4).join('');
@@ -106,51 +108,51 @@
     // https://en.wikipedia.org/wiki/Payment_card_number#Structure
 
     if (value.length === 0) {
-      cardType = '';
-      cardImageSrc = '';
+      card.type = '';
+      card.imageSrc = '';
       return;
     }
 
     if (value.length === 4 && value >= '2221' && value <= '2720') {
-      cardType = 'master-card';
-      cardImageSrc = 'http://creditcardimagelogos.com/wp-content/themes/e838pqefv3ejmkevzirye533556/files/logos/cdn_subdomain/mastercard_64.png';
+      card.type = 'master-card';
+      card.imageSrc = 'http://creditcardimagelogos.com/wp-content/themes/e838pqefv3ejmkevzirye533556/files/logos/cdn_subdomain/mastercard_64.png';
       return;
     }
 
     if (value.length === 2 && value === '34' || value === '37') {
-      cardType = 'amex';
-      cardImageSrc = 'http://creditcardimagelogos.com/wp-content/themes/e838pqefv3ejmkevzirye533556/files/logos/new/cdn_subdomain/american_express_logo_5.gif';
+      card.type = 'amex';
+      card.imageSrc = 'http://creditcardimagelogos.com/wp-content/themes/e838pqefv3ejmkevzirye533556/files/logos/new/cdn_subdomain/american_express_logo_5.gif';
       return;
     }
 
     if (value.length === 1 && value === '4') {
-      cardType = 'visa';
-      cardImageSrc = 'http://creditcardimagelogos.com/wp-content/themes/e838pqefv3ejmkevzirye533556/files/logos/new/cdn_subdomain/visa_logo_8.gif'
+      card.type = 'visa';
+      card.imageSrc = 'http://creditcardimagelogos.com/wp-content/themes/e838pqefv3ejmkevzirye533556/files/logos/new/cdn_subdomain/visa_logo_8.gif'
       return;
     }
   });
 
-  const unsubscribeName = storeCardName.subscribe(value=>cardName=value);
+  const unsubscribeName = storeCardName.subscribe(value=>card.name=value);
 
-  const unsubscribeDates = storeCardDates.subscribe(value=>{console.log('value', value); cardDates=value; });
+  const unsubscribeDates = storeCardDates.subscribe(value=>card.dates=value);
 </script>
 
 <div class="card-container">
-  <div class="card {cardType}">
+  <div class="card {card.type}">
     <div class="upper-section">
       <div class="chip"> <img src={chipImage} alt='default chip image' class="chip-card"> </div>
-      { #if cardImageSrc !== '' }
+      { #if card.imageSrc !== '' }
       <div class="brand-icon"> 
-        <img alt="Loading main image" src={cardImageSrc} class=""> 
+        <img alt="Loading main image" src={card.imageSrc} class=""> 
       </div>
       { /if }
     </div>
     <div class="bottom-section">
-      <div class="card-number">{cardNumber}</div>
-      { #if cardDates !== '' }
-      <div class="card-dates">Good through: <div>{cardDates}</div> </div>
+      <div class="card-number">{card.number}</div>
+      { #if card.dates !== '' }
+      <div class="card-dates">Good through: <div>{card.dates}</div> </div>
       { /if }
-      <div class="card-name">{cardName}</div>
+      <div class="card-name">{card.name}</div>
     </div>
 
 
