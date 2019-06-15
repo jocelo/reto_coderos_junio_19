@@ -16,7 +16,7 @@
 	import AddForm from './AddForm.svelte';
 
 	const name = 'fff';
-	const src='https://homepages.cae.wisc.edu/~ece533/images/airplane.png';
+
 	let count = 0;
 	let doubled = 0;
 	$: {

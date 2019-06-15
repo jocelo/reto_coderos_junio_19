@@ -63,7 +63,8 @@
   import { storeCardNumber } from './store';
   
   let invalidForm = false,
-    cardNumber = '';
+    cardNumber = '',
+    cardHolder = '';
   
   function formSubmit() {
     invalidForm = true;
@@ -72,6 +73,7 @@
   $: {
     console.log('something changed!!', cardNumber);
     storeCardNumber.set(cardNumber);
+    storeCardName.set(cardHolder);
   }
 </script>
 
@@ -79,12 +81,21 @@
   <form class="front-of-card">
 
     <div class="form-field">
-      <input type="text" name="card-number" placeholder="Numero de tarjeta" class="{invalidForm ? 'invalid' : ''}" bind:value={cardNumber} maxlength="16" />
+      <input type="text" 
+        name="card-number" 
+        placeholder="Numero de tarjeta" 
+        class="{invalidForm ? 'invalid' : ''}" 
+        bind:value={cardNumber} 
+        maxlength="16" />
       <div class="error-msg {invalidForm ? 'invalid' : ''}">Missing</div>
     </div>
   
     <div class="form-field">
-      <input type="text" name="card-name" placeholder="Nombre de tarjetahabiente" />
+      <input type="text" 
+        name="card-name" 
+        placeholder="Nombre de tarjetahabiente"
+        class="{invalidForm ? 'invalid' : ''}"
+        bind:value={cardHolder} />
       <div class="error-msg">Missing</div>
     </div>
     

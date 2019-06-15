@@ -24,15 +24,52 @@
     background-color: green;
   }
 
+  .chip-card {
+    width: 60px;
+    background-color: #FFFFCC;
+    border-radius: 10px;
+  }
+
+  .upper-section {
+    height: 50%;
+    text-align: bottom;
+    position: relative;
+  }
+
+  .upper-section .chip {
+    height: 55%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
+
+  .upper-section .brand-icon {
+    height: 45%;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  .card-number {
+    font-size: 33px;
+    text-align: center;
+  }
+
+  .card-name {
+    font-size: 25px;
+    margin-left: 20px;
+  }
 </style>
 
 <script>
   import { storeCardNumber, storeCardName } from './store.js';
 
   let classs = '',
-    cardNumber = '';
+    cardNumber = '',
+    cardName = '',
+    chipImage = 'https://cdn.iconscout.com/icon/free/png-512/credit-card-chip-1537934-1302066.png';
 
-  const unsubscribe = storeCardNumber.subscribe(value=>{
+  const unsubscribeNumber = storeCardNumber.subscribe(value=>{
     cardNumber = value.split('').splice(0,4).join('') + ' ' + 
       value.split('').splice(4,4).join('') + ' ' +
       value.split('').splice(8,4).join('') + ' ' +
@@ -60,13 +97,23 @@
     // Getting IIN details from: 
     // https://en.wikipedia.org/wiki/Payment_card_number#Structure
   });
+
+  const unsubscribeName = storeCardName.subscribe(value=>{
+    cardName = value;
+  });
 </script>
 
 <div class="card-container">
   <div class="card {classs}">
-    <div class="">image</div>
-    <div class=""> <img src="http://creditcardimagelogos.com/wp-content/themes/e838pqefv3ejmkevzirye533556/files/logos/new/cdn_subdomain/visa_logo_8.gif" alt="Visa logo-67*42.gif"/></div>
-    <div class="">1234 1234 1234 1234</div>
-    <div class="">Jose Alfredo Alonso Esquivel</div>
+    <div class="upper-section">
+      <div class="chip"> <img src={chipImage} alt='default chip image' class="chip-card"> </div>
+      <div class="brand-icon"> <img alt="Loading main image" src="http://creditcardimagelogos.com/wp-content/themes/e838pqefv3ejmkevzirye533556/files/logos/new/cdn_subdomain/visa_logo_8.gif" class="chip-card"> </div>
+    </div>
+    <div class="bottom-section">
+      <div class="card-number">{cardNumber}</div>
+      <div class="card-name">{cardName}</div>    
+    </div>
+
+
   </div>
 </div>
