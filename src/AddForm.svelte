@@ -60,20 +60,28 @@
 </style>
 
 <script>
-  import { storeCardNumber, storeCardName } from './store';
+  import { storeCardNumber, storeCardName, storeCardDates } from './store';
   
   let invalidForm = false,
-    cardNumber = '',
-    cardHolder = '';
+    cardData = {
+      cardNumber: '',
+      cardHolder: '',
+      expMonth: '',
+      expYear: '',
+      ccv: ''
+    };
   
-  function formSubmit() {
+  function onFormSubmit() {
     invalidForm = true;
   }
 
   $: {
-    console.log('something changed!!', cardNumber);
-    storeCardNumber.set(cardNumber);
-    storeCardName.set(cardHolder);
+    storeCardNumber.set(cardData.cardNumber);
+    storeCardName.set(cardData.cardHolder);
+    storeCardDates.set('');
+    if (cardData.expMonth && cardData.expYear) {
+      storeCardDates.set(cardData.expMonth+'/'+cardData.expYear);
+    }
   }
 </script>
 
@@ -85,7 +93,7 @@
         name="card-number" 
         placeholder="Numero de tarjeta" 
         class="{invalidForm ? 'invalid' : ''}" 
-        bind:value={cardNumber} 
+        bind:value={cardData.cardNumber} 
         maxlength="16" />
       <div class="error-msg {invalidForm ? 'invalid' : ''}">Missing</div>
     </div>
@@ -95,18 +103,34 @@
         name="card-name" 
         placeholder="Nombre de tarjetahabiente"
         class="{invalidForm ? 'invalid' : ''}"
-        bind:value={cardHolder} />
+        bind:value={cardData.cardHolder} />
       <div class="error-msg">Missing</div>
     </div>
     
     <div class="form-field back-of-card">
-      <input type="number" name="exp-month" placeholder="MM" class="small-width" min="1" max="12" />
-      <input type="number" name="exp-year" placeholder="AAAA" class="mid-width" min="2010" max="2050" />
-      <input type="number" name="ccv" placeholder="CVV" class="mid-width" min="100" max="999" />
+      <input type="number" 
+        name="exp-month" 
+        placeholder="MM" 
+        class="small-width" 
+        min="1" max="12"
+        bind:value={cardData.expMonth} />
+      <input type="number" 
+        name="exp-year" 
+        placeholder="AAAA" 
+        class="mid-width" 
+        min="2010" max="2050"
+        bind:value={cardData.expYear} />
+      <input type="number" 
+        name="ccv" 
+        placeholder="CVV" 
+        class="mid-width" 
+        min="100" max="999"
+        bind:value={cardData.ccv} />
+      <div class="error-msg {invalidForm ? 'invalid' : ''}">Missing</div>
     </div>
 
     <div class="form-actions">
-      <button type="button" on:click={formSubmit}>agregar metodo de pago</button>
+      <button type="button" on:click={onFormSubmit}>agregar metodo de pago</button>
     </div>
 
   </form>

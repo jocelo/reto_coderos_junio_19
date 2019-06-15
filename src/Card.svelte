@@ -52,34 +52,55 @@
     right: 10px;
   }
 
+  .bottom-section {
+    position: relative;
+    height: 50%;
+  }
+
   .card-number {
     font-size: 30px;
     text-align: center;
   }
 
+  .card-dates {
+    text-align: right;
+    font-size: 11px;
+    margin-right: 35px;
+  }
+
+  .card-dates > div {
+    font-weight: bold;
+  }
+
   .card-name {
     font-size: 20px;
-    margin: 10px 20px;
+    margin: 10px 20px 0;
     white-space: nowrap; 
     overflow: hidden;
     text-overflow: ellipsis;
+    position: relative;
+    bottom: 10px;
+    position: absolute;
+    width: 90%;
   }
 </style>
 
 <script>
-  import { storeCardNumber, storeCardName } from './store.js';
+  import { storeCardNumber, storeCardName, storeCardDates} from './store.js';
 
   let cardType = '',
     cardNumber = '',
     cardName = '',
+    cardDates = '',
     cardImageSrc = '',
     chipImage = 'https://cdn.iconscout.com/icon/free/png-512/credit-card-chip-1537934-1302066.png';
 
   const unsubscribeNumber = storeCardNumber.subscribe(value=>{
-    cardNumber = value.split('').splice(0,4).join('') + ' ' + 
-      value.split('').splice(4,4).join('') + ' ' +
-      value.split('').splice(8,4).join('') + ' ' +
-      value.split('').splice(12,4).join('');
+    const cardPieces = value;
+    cardNumber = cardPieces.split('').splice(0,4).join('') + ' ' + 
+      cardPieces.split('').splice(4,4).join('') + ' ' +
+      cardPieces.split('').splice(8,4).join('') + ' ' +
+      cardPieces.split('').splice(12,4).join('');
 
     // IIN details from: 
     // https://en.wikipedia.org/wiki/Payment_card_number#Structure
@@ -109,9 +130,9 @@
     }
   });
 
-  const unsubscribeName = storeCardName.subscribe(value=>{
-    cardName = value;
-  });
+  const unsubscribeName = storeCardName.subscribe(value=>cardName=value);
+
+  const unsubscribeDates = storeCardDates.subscribe(value=>{console.log('value', value); cardDates=value; });
 </script>
 
 <div class="card-container">
@@ -126,7 +147,10 @@
     </div>
     <div class="bottom-section">
       <div class="card-number">{cardNumber}</div>
-      <div class="card-name">{cardName}</div>    
+      { #if cardDates !== '' }
+      <div class="card-dates">Good through: <div>{cardDates}</div> </div>
+      { /if }
+      <div class="card-name">{cardName}</div>
     </div>
 
 
