@@ -239,7 +239,7 @@ var app = (function () {
     			t0 = text("Hello ");
     			t1 = text(name);
     			t2 = text("!");
-    			add_location(h1, file, 4, 0, 41);
+    			add_location(h1, file, 4, 0, 52);
     		},
 
     		l: function claim(nodes) {
@@ -265,7 +265,7 @@ var app = (function () {
     	};
     }
 
-    let name = 'world';
+    let name = 'mundo de coderos';
 
     class App extends SvelteComponentDev {
     	constructor(options) {
